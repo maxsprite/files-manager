@@ -49,7 +49,7 @@ files-manager/
 │   │       ├── lib/       # Utility libraries (Prisma, S3, Kafka)
 │   │       └── routers/   # tRPC routers
 │   │       └── services/  # Split large logic into services
-│   │       
+│   │
 │   └── web/               # Frontend Next.js application
 │       ├── public/        # Static files
 │       └── src/           # Next.js source code
@@ -79,12 +79,15 @@ files-manager/
    pnpm install
    ```
 3. If you see a warning about ignored build scripts:
+
    ```
    pnpm approve-builds
    ```
+
    Approve all.
 
 4. Set up environment files:
+
    ```
    pnpm run setup:env
    ```
@@ -93,6 +96,7 @@ files-manager/
    your specific configuration:
 
    For Project root folder (.env in ./):
+
    ```
    POSTGRES_USER=postgres
    POSTGRES_PASSWORD=postgres
@@ -106,6 +110,7 @@ files-manager/
    ```
 
    For API service (.env in apps/api):
+
    ```
    DATABASE_URL="postgresql://postgres:postgres@localhost:5432/files_manager"
 
@@ -142,6 +147,7 @@ files-manager/
    pnpx prisma migrate dev
    ```
 9. Start the development servers. Do it from the project root directory:
+
    ```
    # Start both API and web servers:
    pnpm run dev

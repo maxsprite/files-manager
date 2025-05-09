@@ -1,21 +1,21 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 // Schema for file uploads
 export const uploadFileSchema = z.object({
-  name: z.string().min(1, 'Filename is required'),
-  file: z.string().min(1, 'File content is required'), // Base64 encoded file
+  name: z.string().min(1, "Filename is required"),
+  file: z.string().min(1, "File content is required"), // Base64 encoded file
   contentType: z.string().optional(),
 });
 
 // Schema for file deletion
-export const deleteFileSchema = z.number().int().positive('Invalid file ID');
+export const deleteFileSchema = z.number().int().positive("Invalid file ID");
 
 // File response type
 export const fileSchema = z.object({
   id: z.number(),
   name: z.string(),
   url: z.string(),
-  createdAt: z.date()
+  createdAt: z.date(),
 });
 
 // Types derived from schemas

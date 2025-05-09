@@ -9,7 +9,8 @@ const fileUploaderAreaVariants = cva(
   {
     variants: {
       variant: {
-        default: "border-gray-300 bg-gray-50 hover:bg-gray-100 hover:border-gray-400",
+        default:
+          "border-gray-300 bg-gray-50 hover:bg-gray-100 hover:border-gray-400",
         accepted: "border-green-300 bg-green-50 hover:border-green-400",
         rejected: "border-red-300 bg-red-50 hover:border-red-400",
       },
@@ -20,13 +21,13 @@ const fileUploaderAreaVariants = cva(
       },
       isLoading: {
         true: "opacity-70 cursor-wait",
-      }
+      },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 export interface FileUploaderAreaProps
@@ -43,24 +44,32 @@ export interface FileUploaderAreaProps
   children?: React.ReactNode;
 }
 
-export const FileUploaderArea = React.forwardRef<HTMLDivElement, FileUploaderAreaProps>(
-  ({ 
-    className, 
-    variant, 
-    size, 
-    isLoading,
-    onChange,
-    onError,
-    accept,
-    multiple = false,
-    maxSize,
-    icon,
-    description,
-    children,
-    ...props 
-  }, ref) => {
+export const FileUploaderArea = React.forwardRef<
+  HTMLDivElement,
+  FileUploaderAreaProps
+>(
+  (
+    {
+      className,
+      variant,
+      size,
+      isLoading,
+      onChange,
+      onError,
+      accept,
+      multiple = false,
+      maxSize,
+      icon,
+      description,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
     const [isDragActive, setIsDragActive] = React.useState(false);
-    const [dragVariant, setDragVariant] = React.useState<"accepted" | "rejected" | undefined>(undefined);
+    const [dragVariant, setDragVariant] = React.useState<
+      "accepted" | "rejected" | undefined
+    >(undefined);
     const inputRef = React.useRef<HTMLInputElement>(null);
 
     const handleClick = () => {
@@ -71,12 +80,12 @@ export const FileUploaderArea = React.forwardRef<HTMLDivElement, FileUploaderAre
     const validateFiles = (files: File[]): File[] => {
       // Filter files by accepted file types
       if (accept) {
-        const acceptedTypes = accept.split(",").map(type => type.trim());
-        files = files.filter(file => {
+        const acceptedTypes = accept.split(",").map((type) => type.trim());
+        files = files.filter((file) => {
           const fileType = file.type || "";
           const fileExtension = `.${file.name.split(".").pop()}`;
-          
-          return acceptedTypes.some(type => {
+
+          return acceptedTypes.some((type) => {
             if (type.startsWith(".")) {
               // Extension match
               return fileExtension.toLowerCase() === type.toLowerCase();
@@ -98,26 +107,28 @@ export const FileUploaderArea = React.forwardRef<HTMLDivElement, FileUploaderAre
 
       // Check file size limit
       if (maxSize) {
-        files = files.filter(file => file.size <= maxSize);
+        files = files.filter((file) => file.size <= maxSize);
         if (files.length === 0) {
-          onError?.(`File size exceeds maximum allowed (${formatSize(maxSize)})`);
+          onError?.(
+            `File size exceeds maximum allowed (${formatSize(maxSize)})`,
+          );
           return [];
         }
       }
 
-      return multiple ? files : (files[0] ? [files[0]] : []);
+      return multiple ? files : files[0] ? [files[0]] : [];
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (!e.target.files?.length) return;
-      
+
       const fileList = Array.from(e.target.files);
       const validFiles = validateFiles(fileList);
-      
+
       if (validFiles.length > 0) {
         onChange?.(validFiles);
       }
-      
+
       // Clear the input value so the same file can be selected again
       if (inputRef.current) {
         inputRef.current.value = "";
@@ -127,22 +138,22 @@ export const FileUploaderArea = React.forwardRef<HTMLDivElement, FileUploaderAre
     const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       e.stopPropagation();
-      
+
       if (isLoading) return;
-      
+
       setIsDragActive(true);
-      
+
       // Check if the dragged items are files
       if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
         const areAllFiles = Array.from(e.dataTransfer.items).every(
-          item => item.kind === "file"
+          (item) => item.kind === "file",
         );
-        
+
         // Check file types if accept is provided
         if (areAllFiles && accept) {
-          const filesMatch = Array.from(e.dataTransfer.items).some(item => {
+          const filesMatch = Array.from(e.dataTransfer.items).some((item) => {
             const fileType = item.type || "";
-            return accept.split(",").some(type => {
+            return accept.split(",").some((type) => {
               type = type.trim();
               if (type.includes("*")) {
                 return fileType.match(new RegExp(type.replace("*", ".*")));
@@ -150,7 +161,7 @@ export const FileUploaderArea = React.forwardRef<HTMLDivElement, FileUploaderAre
               return type === fileType;
             });
           });
-          
+
           setDragVariant(filesMatch ? "accepted" : "rejected");
         } else {
           setDragVariant(areAllFiles ? "accepted" : "rejected");
@@ -161,7 +172,7 @@ export const FileUploaderArea = React.forwardRef<HTMLDivElement, FileUploaderAre
     const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       e.stopPropagation();
-      
+
       setIsDragActive(false);
       setDragVariant(undefined);
     };
@@ -174,16 +185,16 @@ export const FileUploaderArea = React.forwardRef<HTMLDivElement, FileUploaderAre
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       e.stopPropagation();
-      
+
       setIsDragActive(false);
       setDragVariant(undefined);
-      
+
       if (isLoading) return;
-      
+
       if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
         const fileList = Array.from(e.dataTransfer.files);
         const validFiles = validateFiles(fileList);
-        
+
         if (validFiles.length > 0) {
           onChange?.(validFiles);
         }
@@ -192,22 +203,22 @@ export const FileUploaderArea = React.forwardRef<HTMLDivElement, FileUploaderAre
 
     // Helper function to format file size
     const formatSize = (bytes: number): string => {
-      if (bytes === 0) return '0 Bytes';
+      if (bytes === 0) return "0 Bytes";
       const k = 1024;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+      const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
       const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
     };
 
     return (
       <div
         className={cn(
-          fileUploaderAreaVariants({ 
-            variant: isDragActive ? dragVariant : variant, 
-            size, 
-            isLoading 
-          }), 
-          className
+          fileUploaderAreaVariants({
+            variant: isDragActive ? dragVariant : variant,
+            size,
+            isLoading,
+          }),
+          className,
         )}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
@@ -226,13 +237,13 @@ export const FileUploaderArea = React.forwardRef<HTMLDivElement, FileUploaderAre
           onChange={handleChange}
           disabled={isLoading}
         />
-        
+
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-background/50 rounded-lg">
             <div className="h-8 w-8 rounded-full border-2 border-current border-t-transparent animate-spin" />
           </div>
         )}
-        
+
         <div className="flex flex-col items-center text-center space-y-2">
           {icon || (
             <div className="mb-4 text-blue-500">
@@ -252,37 +263,43 @@ export const FileUploaderArea = React.forwardRef<HTMLDivElement, FileUploaderAre
                 <path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z" />
                 <path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8" />
               </svg>
-
             </div>
           )}
-          
+
           <div className="flex flex-col space-y-1">
             <span className="text-lg font-semibold text-blue-600">
-              {isDragActive 
-                ? dragVariant === "accepted" 
-                  ? "Great! Release to upload" 
+              {isDragActive
+                ? dragVariant === "accepted"
+                  ? "Great! Release to upload"
                   : "This file format is not supported"
-                : "Drag files here"
-              }
+                : "Drag files here"}
             </span>
-            
+
             {description || (
               <span className="text-sm text-slate-500">
-                {multiple 
+                {multiple
                   ? "or select files from your computer"
-                  : "or select a file from your computer"
-                }
-                {accept && <span className="block mt-1 text-xs">Supported formats: {accept.replace(/\./g, "").replace(/,/g, ", ")}</span>}
-                {maxSize && <span className="block mt-1 text-xs">Maximum size: {formatSize(maxSize)}</span>}
+                  : "or select a file from your computer"}
+                {accept && (
+                  <span className="block mt-1 text-xs">
+                    Supported formats:{" "}
+                    {accept.replace(/\./g, "").replace(/,/g, ", ")}
+                  </span>
+                )}
+                {maxSize && (
+                  <span className="block mt-1 text-xs">
+                    Maximum size: {formatSize(maxSize)}
+                  </span>
+                )}
               </span>
             )}
           </div>
-          
+
           {children}
         </div>
       </div>
     );
-  }
+  },
 );
 
 FileUploaderArea.displayName = "FileUploaderArea";

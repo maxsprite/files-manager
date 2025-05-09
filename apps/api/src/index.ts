@@ -1,18 +1,18 @@
-import { createServer } from './server.js'
-import { connectPrisma, disconnectPrisma } from './lib/prisma.js'
-import { connectKafka, disconnectKafka } from './lib/kafka.js';
-import 'dotenv/config';
+import { createServer } from "./server.js";
+import { connectPrisma, disconnectPrisma } from "./lib/prisma.js";
+import { connectKafka, disconnectKafka } from "./lib/kafka.js";
+import "dotenv/config";
 
 const server = createServer();
-const port = Number(process.env.FASTIFY_PORT || 8000)
-const host = process.env.FASTIFY_HOST || '0.0.0.0'
+const port = Number(process.env.FASTIFY_PORT || 8000);
+const host = process.env.FASTIFY_HOST || "0.0.0.0";
 
 const start = async () => {
   try {
     // Connecting to the database and Kafka
     await connectPrisma();
     await connectKafka();
-    
+
     // Starting the server
     await server.listen({ port, host });
     console.log(`Server is running on port ${port}`);
@@ -25,7 +25,7 @@ const start = async () => {
 };
 
 // Handling application shutdown
-process.on('SIGINT', async () => {
+process.on("SIGINT", async () => {
   await server.close();
   await disconnectPrisma();
   await disconnectKafka();

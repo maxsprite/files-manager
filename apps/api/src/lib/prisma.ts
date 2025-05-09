@@ -12,12 +12,12 @@ export function getPrisma(): PrismaClient {
 export async function connectPrisma(): Promise<void> {
   const client = getPrisma();
   await client.$connect();
-  console.log('Connected to database');
+  console.log("Connected to database");
 }
 
 export async function disconnectPrisma(): Promise<void> {
   if (prisma) {
     await prisma.$disconnect();
-    console.log('Disconnected from database');
+    console.log("Disconnected from database");
   }
 }

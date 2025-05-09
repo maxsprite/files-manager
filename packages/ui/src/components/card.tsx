@@ -24,14 +24,14 @@ const cardVariants = cva(
         lg: "rounded-xl",
         full: "rounded-full",
         none: "rounded-none",
-      }
+      },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
       radius: "default",
     },
-  }
+  },
 );
 
 export interface CardProps
@@ -43,7 +43,7 @@ export interface CardProps
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant, size, radius, ...props }, ref) => {
     const Comp = "div";
-    
+
     return (
       <Comp
         className={cn(cardVariants({ variant, size, radius }), className)}
@@ -51,7 +51,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
         {...props}
       />
     );
-  }
+  },
 );
 Card.displayName = "Card";
 
@@ -73,7 +73,10 @@ export const CardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn("text-lg font-semibold leading-none tracking-tight", className)}
+    className={cn(
+      "text-lg font-semibold leading-none tracking-tight",
+      className,
+    )}
     {...props}
   />
 ));

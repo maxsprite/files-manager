@@ -5,7 +5,7 @@ const nextConfig = {
   experimental: {
     // This ensures Next.js processes CSS imports from external packages
     externalDir: true,
-  }
+  },
 };
 
 module.exports = nextConfig;

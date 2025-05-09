@@ -5,7 +5,7 @@ import { client } from "@/utils/trpc";
 
 export default function UploadFiles({
   filesTrigger,
-  setFilesTrigger
+  setFilesTrigger,
 }: {
   filesTrigger: number;
   setFilesTrigger: (value: number) => void;
@@ -16,12 +16,12 @@ export default function UploadFiles({
     // Temporary solution: upload files one by one
     for (const file of files) {
       const base64 = await fileToBase64(file);
-      
+
       // Upload the file to the server
       await client.files.uploadFile.mutate({
         name: file.name,
-        file: base64.split(',')[1], // Delete prefix "data:image/jpeg;base64,"
-        contentType: file.type
+        file: base64.split(",")[1], // Delete prefix "data:image/jpeg;base64,"
+        contentType: file.type,
       });
     }
 
@@ -33,11 +33,13 @@ export default function UploadFiles({
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result as string);
-      reader.onerror = error => reject(error);
+      reader.onerror = (error) => reject(error);
     });
   };
 
-  return (<>
-    <FileUploaderArea multiple={true} onChange={handleFileChange} />
-  </>);
+  return (
+    <>
+      <FileUploaderArea multiple={true} onChange={handleFileChange} />
+    </>
+  );
 }
