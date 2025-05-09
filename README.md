@@ -86,7 +86,7 @@ files-manager/
 
 4. Set up environment files:
    ```
-   pnpm setup:env
+   pnpm run setup:env
    ```
 
    This will create the necessary .env files. You can then customize them with
@@ -150,6 +150,9 @@ files-manager/
    pnpm run dev:api    # Start API server
    pnpm run dev:web    # Start web server
    ```
+
+   If you encounter errors with the command `pnpm run dev`, then try to re-run
+   it or run `pnpm run build` before.
 
 ## Development
 
