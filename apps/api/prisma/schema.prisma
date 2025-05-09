@@ -1,0 +1,17 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm" 
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model File {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255) // Original filename
+  url       String   @db.Text         // URL to the file in S3
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "module": "NodeNext",
+    "paths": {
+      "shared/*": ["../../packages/shared/src/*"]
+    }
+  }
+}

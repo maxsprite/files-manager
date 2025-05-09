@@ -1,0 +1,34 @@
+{
+  "name": "files-manager",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup:env": "node scripts/setup-env.js",
+    "dev": "pnpm --parallel --filter shared --filter ui --filter api --filter web run dev",
+    "dev:api": "pnpm --filter api run dev",
+    "dev:web": "pnpm --filter web run dev",
+    "build": "pnpm --parallel --filter shared --filter ui --filter api --filter web run build",
+    "start": "pnpm --parallel --filter shared --filter api --filter web run start",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix"
+  },
+  "packageManager": "pnpm@10.10.0",
+  "devDependencies": {
+    "@eslint/js": "^9.26.0",
+    "eslint": "^9.26.0",
+    "eslint-config-prettier": "^10.1.3",
+    "eslint-plugin-prettier": "^5.4.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.0"
+  },
+  "dependencies": {
+    "globals": "^16.1.0"
+  }
+}

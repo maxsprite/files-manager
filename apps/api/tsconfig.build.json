@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "esModuleInterop": true,
+    "strict": true,
+    "paths": {
+      "shared/*": ["../../packages/shared/src/*"]
+    }
+  },
+  "include": ["src/**/*"], // Or your source file patterns
+  "exclude": ["node_modules", "dist"] // Or other exclusions
+}
